@@ -7,6 +7,8 @@ package info.walltime.bitcoinwot;
 
 import static info.walltime.bitcoinwot.BitcoinWot.BOT;
 import java.awt.Cursor;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -28,8 +30,15 @@ public class Login extends javax.swing.JFrame {
         BitcoinWot.LOGIN = this;
         initComponents();
 
-        getRootPane().setDefaultButton(jButton1);
         BitcoinWot.centreWindow(this);
+
+        this.addWindowListener(new WindowAdapter()
+            {
+                public void windowClosing(WindowEvent e)
+                {
+                    onClose();
+                }
+            });
     }
 
     /**
@@ -50,6 +59,7 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bitcoin OTC WoT para preguiçosos");
+        setAlwaysOnTop(true);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -75,6 +85,11 @@ public class Login extends javax.swing.JFrame {
 
         jButton2.setText("Registrar...");
         jButton2.setEnabled(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,9 +145,24 @@ public class Login extends javax.swing.JFrame {
             jButton1.setEnabled(false);
             setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
+            BitcoinWot.REGISTERING.set(false);
+            BitcoinWot.BOT.changeNick(jTextField1.getText());
             BitcoinWot.BOT.sendMessage("nickserv", "INFO " + jTextField1.getText());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (jTextField1.getText().length() < 3) {
+            JOptionPane.showMessageDialog(null, "Muito curto esse nick.");
+        } else {
+            jButton2.setEnabled(false);
+            setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+            BitcoinWot.REGISTERING.set(true);
+            BitcoinWot.BOT.changeNick(jTextField1.getText());
+            BitcoinWot.BOT.sendMessage("nickserv", "INFO " + jTextField1.getText());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public JButton getjButton1() {
         return jButton1;

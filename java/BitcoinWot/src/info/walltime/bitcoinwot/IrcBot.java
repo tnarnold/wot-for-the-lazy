@@ -20,6 +20,35 @@ public class IrcBot extends PircBot {
         super.onPrivateMessage(sender, login, hostname, message);
         
         System.out.println("Private message: " + sender + ": " + message);
+
+        if (sender.equals("gribble")) {
+            if (message.contains("Your challenge string")) {
+                String[] challengeArray = message.split(" ");
+                String challenge = challengeArray[challengeArray.length - 1];
+                String proof = BitcoinWot.KEY.signMessage(challenge);
+
+                BitcoinWot.BOT.sendMessage("gribble", ";;bcverify " + proof);
+            } else if (message.contains("You are now authenticated")) {
+                if (BitcoinWot.REGISTERING_WOT != null) {
+                    BitcoinWot.REGISTERING_WOT.dispatchEvent(new WindowEvent(BitcoinWot.REGISTERING_WOT, 
+                            WindowEvent.WINDOW_CLOSING));
+                }
+
+                if (BitcoinWot.CREATING_PAIR != null) {
+                    BitcoinWot.CREATING_PAIR.dispatchEvent(new WindowEvent(BitcoinWot.CREATING_PAIR, 
+                            WindowEvent.WINDOW_CLOSING));
+                }
+
+                if (BitcoinWot.PASSWORD != null) {
+                    BitcoinWot.PASSWORD.dispatchEvent(new WindowEvent(BitcoinWot.PASSWORD, 
+                            WindowEvent.WINDOW_CLOSING));
+                }
+
+                java.awt.EventQueue.invokeLater(() -> {
+                    new AuthenticatedUser().setVisible(true);
+                });
+            }
+        }
     }
 
     @Override
@@ -30,24 +59,40 @@ public class IrcBot extends PircBot {
             System.out.println("Notice: " + sourceNick + ": " + notice);
 
             if (notice.contains("is not registered")) {
-                JOptionPane.showMessageDialog(null, 
-                        "Esse nick não está registrado, por favor registre antes.");
-
-                BitcoinWot.LOGIN.getjButton1().setEnabled(true);
-                BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            } else if (notice.contains("Registered")) {
-                BitcoinWot.LOGIN.setState(Frame.ICONIFIED);
-
-                BitcoinWot.LOGIN.getjButton1().setEnabled(true);
-                BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 
-                java.awt.EventQueue.invokeLater(() -> {
-                    new Password().setVisible(true);
-                });
-            } else if (notice.contains("has been regained")) {
-                BitcoinWot.PASSWORD.dispatchEvent(new WindowEvent(BitcoinWot.PASSWORD, 
-                        WindowEvent.WINDOW_CLOSING));
-            } else if (notice.contains("invalid password")) {
+                if (!BitcoinWot.REGISTERING.get()) {
+                    JOptionPane.showMessageDialog(null, 
+                            "Esse nick não está registrado, por favor registre antes.");
+
+                    BitcoinWot.LOGIN.getjButton1().setEnabled(true);
+                    BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                } else {
+                    BitcoinWot.LOGIN.getjButton2().setEnabled(true);
+                    BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));  
+                    BitcoinWot.LOGIN.setState(Frame.ICONIFIED);
+
+                    java.awt.EventQueue.invokeLater(() -> {
+                        new NewPassword().setVisible(true);
+                    });
+                }
+            } else if (notice.contains("Registered")) {
+                if (BitcoinWot.REGISTERING.get()) {
+                    JOptionPane.showMessageDialog(null, 
+                            "Esse nick já existe, por favor escolha outro.");
+
+                    BitcoinWot.LOGIN.getjButton2().setEnabled(true);
+                    BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));                    
+                } else {
+                    BitcoinWot.LOGIN.setState(Frame.ICONIFIED);
+
+                    BitcoinWot.LOGIN.getjButton1().setEnabled(true);
+                    BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+                    java.awt.EventQueue.invokeLater(() -> {
+                        new Password().setVisible(true);
+                    });
+                }
+            } if (notice.contains("invalid password")) {
                             JOptionPane.showMessageDialog(null, 
                         "Senha incorreta!");
             }

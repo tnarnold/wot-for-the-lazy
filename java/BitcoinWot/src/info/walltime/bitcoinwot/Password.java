@@ -1,28 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package info.walltime.bitcoinwot;
 
-/**
- *
- * @author felipelalli
- */
+import static info.walltime.bitcoinwot.BitcoinWot.BOT;
+import java.awt.Cursor;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JOptionPane;
+import org.bitcoinj.core.Address;
+import org.bitcoinj.core.ECKey;
+import org.bitcoinj.params.MainNetParams;
+
 public class Password extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Password
-     */
     public Password() {
         BitcoinWot.PASSWORD = this;
         
         initComponents();
-
-        getRootPane().setDefaultButton(jButton1);
         BitcoinWot.centreWindow(this);
+       
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -78,8 +74,33 @@ public class Password extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        jButton1.setEnabled(false);
+        setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+        BitcoinWot.PASSWORD_STRING = new String(jPasswordField1.getPassword());
+
         BitcoinWot.BOT.sendMessage("nickserv", "REGAIN " 
-                + BitcoinWot.LOGIN.getjTextField1().getText() + " " + new String(jPasswordField1.getPassword()));
+                + BitcoinWot.LOGIN.getjTextField1().getText()
+                + " " + new String(jPasswordField1.getPassword()));
+
+        BitcoinWot.BOT.joinChannel("#bitcoin-otc");
+
+        try {
+            ECKey generatedKey = new KeyDerivator(
+                    BitcoinWot.LOGIN.getjTextField1().getText(), 
+                    new String(jPasswordField1.getPassword())).generateKey();
+
+            BitcoinWot.KEY = generatedKey;
+
+            BitcoinWot.BOT.sendMessage("gribble", ";;bcauth " 
+                    + BitcoinWot.LOGIN.getjTextField1().getText());
+        } catch (Exception e) {
+            e.printStackTrace();            
+
+            JOptionPane.showMessageDialog(null, 
+                    "Erro ao derivar as chaves: " + e);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
