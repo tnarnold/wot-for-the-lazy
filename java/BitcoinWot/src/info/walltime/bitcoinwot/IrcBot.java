@@ -51,6 +51,12 @@ public class IrcBot extends PircBot {
                     BitcoinWot.PASSWORD.dispatchEvent(new WindowEvent(BitcoinWot.PASSWORD, 
                             WindowEvent.WINDOW_CLOSING));
                 }
+            } else if (message.contains("You have to have received some ratings in order to rate other users")) {
+                JOptionPane.showMessageDialog(null, 
+                        "Hmmmmmm... Parece que você é novo por aqui, não?"
+                        + "\n\nInfelizmente não é possível qualificar ninguém se você não tem reputação positiva."
+                        + "\n\nMas não desista. Você só precisa convencer alguém que já tenha reputação a te dar um voto de confiança."
+                        + "\n\nEntre na comunidade Bitcoin OTC WoT Brasil no Facebook e peça a alguém que você conheça.");
             }
         }
     }

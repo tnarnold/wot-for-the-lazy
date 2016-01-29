@@ -74,38 +74,43 @@ public class Password extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        jButton1.setEnabled(false);
-        setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-        BitcoinWot.PASSWORD_STRING = new String(jPasswordField1.getPassword());
+        if (new String(jPasswordField1.getPassword()).isEmpty()) {
+            JOptionPane.showMessageDialog(null, 
+            "Não brinca. Você disse que era preguiçoso, não burro.");
+        } else {        
+            jButton1.setEnabled(false);
+            setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-        BitcoinWot.BOT.sendMessage("NickServ", "REGAIN "+ BitcoinWot.LOGIN.getjTextField1().getText() 
-                + " "  + new String(jPasswordField1.getPassword()));
+            BitcoinWot.PASSWORD_STRING = new String(jPasswordField1.getPassword());
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    BitcoinWot.BOT.joinChannel("#gribble");
+            BitcoinWot.BOT.sendMessage("NickServ", "REGAIN "+ BitcoinWot.LOGIN.getjTextField1().getText() 
+                    + " "  + new String(jPasswordField1.getPassword()));
 
-                    ECKey generatedKey = new KeyDerivator(
-                            BitcoinWot.LOGIN.getjTextField1().getText(), 
-                            new String(jPasswordField1.getPassword())).generateKey();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                        BitcoinWot.BOT.joinChannel("#gribble");
 
-                    BitcoinWot.KEY = generatedKey;
+                        ECKey generatedKey = new KeyDerivator(
+                                BitcoinWot.LOGIN.getjTextField1().getText(), 
+                                new String(jPasswordField1.getPassword())).generateKey();
 
-                    BitcoinWot.BOT.sendMessage("gribble", ";;bcauth " 
-                            + BitcoinWot.LOGIN.getjTextField1().getText());
-                } catch (Exception e) {
-                    e.printStackTrace();            
+                        BitcoinWot.KEY = generatedKey;
 
-                    JOptionPane.showMessageDialog(null, 
-                            "Erro ao derivar as chaves: " + e);
+                        BitcoinWot.BOT.sendMessage("gribble", ";;bcauth " 
+                                + BitcoinWot.LOGIN.getjTextField1().getText());
+                    } catch (Exception e) {
+                        e.printStackTrace();            
+
+                        JOptionPane.showMessageDialog(null, 
+                                "Erro ao derivar as chaves: " + e);
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
