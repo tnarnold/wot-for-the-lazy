@@ -37,7 +37,7 @@ public class Password extends javax.swing.JFrame {
 
         jLabel1.setText("Digite a sua senha:");
 
-        jButton1.setText("Entrar no canal #bitcoin-otc...");
+        jButton1.setText("Fazer login...");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -86,9 +86,10 @@ public class Password extends javax.swing.JFrame {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                BitcoinWot.BOT.joinChannel("#bitcoin-otc");
-
                 try {
+                    Thread.sleep(1000);
+                    BitcoinWot.BOT.joinChannel("#gribble");
+
                     ECKey generatedKey = new KeyDerivator(
                             BitcoinWot.LOGIN.getjTextField1().getText(), 
                             new String(jPasswordField1.getPassword())).generateKey();

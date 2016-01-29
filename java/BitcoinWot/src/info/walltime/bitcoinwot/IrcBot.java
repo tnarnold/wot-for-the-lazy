@@ -94,9 +94,6 @@ public class IrcBot extends PircBot {
                                  new WindowEvent(BitcoinWot.VERIFY_EMAIL, 
                             WindowEvent.WINDOW_CLOSING));
 
-                         BitcoinWot.BOT.changeNick(BitcoinWot.LOGIN.getjTextField1().getText());
-                         BitcoinWot.BOT.identify(BitcoinWot.PASSWORD_STRING);
-
                         java.awt.EventQueue.invokeLater(new Runnable() {
                           public void run() {             
                               new RegisteringWot().setVisible(true);
