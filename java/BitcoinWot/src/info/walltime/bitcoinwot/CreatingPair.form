@@ -145,7 +145,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Registrar usu&#xe1;rio no OTC WoT..."/>
+        <Property name="text" type="java.lang.String" value="Enviar email de verifica&#xe7;&#xe3;o..."/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>

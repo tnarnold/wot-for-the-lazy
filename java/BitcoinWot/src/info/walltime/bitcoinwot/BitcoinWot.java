@@ -14,13 +14,14 @@ public class BitcoinWot {
 
     public static final IrcBot BOT = new IrcBot();
     public static final AtomicBoolean REGISTERING = new AtomicBoolean();
+    public static final AtomicBoolean VERIFYING_EMAIL = new AtomicBoolean();
     
     public static Login LOGIN;
     public static Password PASSWORD;
     public static ECKey KEY;
     public static String PASSWORD_STRING;
     public static RegisteringWot REGISTERING_WOT;
-    public static CreatingPair CREATING_PAIR;
+    public static VerifyEmail VERIFY_EMAIL;
 
     public static void main(String[] args) throws Exception {
         java.awt.EventQueue.invokeLater(() -> {

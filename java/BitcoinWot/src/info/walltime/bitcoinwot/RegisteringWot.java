@@ -33,9 +33,6 @@ public class RegisteringWot extends javax.swing.JFrame {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                BitcoinWot.BOT.sendMessage("nickserv", "REGISTER "
-                        + BitcoinWot.PASSWORD_STRING);
-
                 BitcoinWot.BOT.joinChannel("#bitcoin-otc");
                 
                 Address address = new Address(new MainNetParams(), 

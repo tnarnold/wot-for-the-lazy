@@ -80,27 +80,31 @@ public class Password extends javax.swing.JFrame {
 
         BitcoinWot.PASSWORD_STRING = new String(jPasswordField1.getPassword());
 
-        BitcoinWot.BOT.sendMessage("nickserv", "REGAIN " 
-                + BitcoinWot.LOGIN.getjTextField1().getText()
-                + " " + new String(jPasswordField1.getPassword()));
+        BitcoinWot.BOT.sendMessage("NickServ", "REGAIN "+ BitcoinWot.LOGIN.getjTextField1().getText() 
+                + " "  + new String(jPasswordField1.getPassword()));
 
-        BitcoinWot.BOT.joinChannel("#bitcoin-otc");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BitcoinWot.BOT.joinChannel("#bitcoin-otc");
 
-        try {
-            ECKey generatedKey = new KeyDerivator(
-                    BitcoinWot.LOGIN.getjTextField1().getText(), 
-                    new String(jPasswordField1.getPassword())).generateKey();
+                try {
+                    ECKey generatedKey = new KeyDerivator(
+                            BitcoinWot.LOGIN.getjTextField1().getText(), 
+                            new String(jPasswordField1.getPassword())).generateKey();
 
-            BitcoinWot.KEY = generatedKey;
+                    BitcoinWot.KEY = generatedKey;
 
-            BitcoinWot.BOT.sendMessage("gribble", ";;bcauth " 
-                    + BitcoinWot.LOGIN.getjTextField1().getText());
-        } catch (Exception e) {
-            e.printStackTrace();            
+                    BitcoinWot.BOT.sendMessage("gribble", ";;bcauth " 
+                            + BitcoinWot.LOGIN.getjTextField1().getText());
+                } catch (Exception e) {
+                    e.printStackTrace();            
 
-            JOptionPane.showMessageDialog(null, 
-                    "Erro ao derivar as chaves: " + e);
-        }
+                    JOptionPane.showMessageDialog(null, 
+                            "Erro ao derivar as chaves: " + e);
+                }
+            }
+        }).start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

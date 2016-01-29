@@ -34,11 +34,6 @@ public class IrcBot extends PircBot {
                             WindowEvent.WINDOW_CLOSING));
                 }
 
-                if (BitcoinWot.CREATING_PAIR != null) {
-                    BitcoinWot.CREATING_PAIR.dispatchEvent(new WindowEvent(BitcoinWot.CREATING_PAIR, 
-                            WindowEvent.WINDOW_CLOSING));
-                }
-
                 if (BitcoinWot.PASSWORD != null) {
                     BitcoinWot.PASSWORD.dispatchEvent(new WindowEvent(BitcoinWot.PASSWORD, 
                             WindowEvent.WINDOW_CLOSING));
@@ -47,6 +42,15 @@ public class IrcBot extends PircBot {
                 java.awt.EventQueue.invokeLater(() -> {
                     new AuthenticatedUser().setVisible(true);
                 });
+            } else if (message.contains("Signature verification failed")) {
+                JOptionPane.showMessageDialog(null, 
+                            "Erro na autenticação.\n\nProvavelmente esse usuário não foi criado usando "
+                                    + "Bitcoin OTC WoT para preguiçosos.\n\nParabéns, você não é um preguiçoso! :)");
+
+                if (BitcoinWot.PASSWORD != null) {
+                    BitcoinWot.PASSWORD.dispatchEvent(new WindowEvent(BitcoinWot.PASSWORD, 
+                            WindowEvent.WINDOW_CLOSING));
+                }
             }
         }
     }
@@ -67,21 +71,44 @@ public class IrcBot extends PircBot {
                     BitcoinWot.LOGIN.getjButton1().setEnabled(true);
                     BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 } else {
-                    BitcoinWot.LOGIN.getjButton2().setEnabled(true);
-                    BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));  
-                    BitcoinWot.LOGIN.setState(Frame.ICONIFIED);
 
-                    java.awt.EventQueue.invokeLater(() -> {
-                        new NewPassword().setVisible(true);
-                    });
+                    if (BitcoinWot.VERIFYING_EMAIL.get()) {
+                        if (BitcoinWot.REGISTERING.get()) {
+                            JOptionPane.showMessageDialog(null, 
+                                    "Ocorreu um erro na verificação do email.");
+                        }   
+                    } else {
+                        BitcoinWot.LOGIN.getjButton2().setEnabled(true);
+                        BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));  
+                        BitcoinWot.LOGIN.setState(Frame.ICONIFIED);
+
+                        java.awt.EventQueue.invokeLater(() -> {
+                            new NewPassword().setVisible(true);
+                        });
+                    }
                 }
             } else if (notice.contains("Registered")) {
                 if (BitcoinWot.REGISTERING.get()) {
-                    JOptionPane.showMessageDialog(null, 
-                            "Esse nick já existe, por favor escolha outro.");
+                    if (BitcoinWot.VERIFYING_EMAIL.get()) {
+                         BitcoinWot.VERIFY_EMAIL.dispatchEvent(
+                                 new WindowEvent(BitcoinWot.VERIFY_EMAIL, 
+                            WindowEvent.WINDOW_CLOSING));
 
-                    BitcoinWot.LOGIN.getjButton2().setEnabled(true);
-                    BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));                    
+                         BitcoinWot.BOT.changeNick(BitcoinWot.LOGIN.getjTextField1().getText());
+                         BitcoinWot.BOT.identify(BitcoinWot.PASSWORD_STRING);
+
+                        java.awt.EventQueue.invokeLater(new Runnable() {
+                          public void run() {             
+                              new RegisteringWot().setVisible(true);
+                          }
+                        });
+                    } else {
+                        JOptionPane.showMessageDialog(null, 
+                                "Esse nick já existe, por favor escolha outro.");
+
+                        BitcoinWot.LOGIN.getjButton2().setEnabled(true);
+                        BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); 
+                    }
                 } else {
                     BitcoinWot.LOGIN.setState(Frame.ICONIFIED);
 
@@ -92,9 +119,13 @@ public class IrcBot extends PircBot {
                         new Password().setVisible(true);
                     });
                 }
-            } if (notice.contains("invalid password")) {
-                            JOptionPane.showMessageDialog(null, 
-                        "Senha incorreta!");
+            } if (notice.contains("Invalid password")) {
+                    JOptionPane.showMessageDialog(null, "Senha incorreta!");
+
+                if (BitcoinWot.PASSWORD != null) {
+                    BitcoinWot.PASSWORD.dispatchEvent(new WindowEvent(BitcoinWot.PASSWORD, 
+                            WindowEvent.WINDOW_CLOSING));
+                }
             }
         }
     }

@@ -28,8 +28,7 @@ public class CreatingPair extends javax.swing.JFrame {
      * Creates new form CreatingPair
      */
     public CreatingPair(final String username, final String password) {
-        BitcoinWot.CREATING_PAIR = this;
-        
+       
         initComponents();
         
         BitcoinWot.centreWindow(this);
@@ -116,7 +115,7 @@ public class CreatingPair extends javax.swing.JFrame {
         jTextArea1.setOpaque(false);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jButton1.setText("Registrar usuário no OTC WoT...");
+        jButton1.setText("Enviar email de verificação...");
         jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,10 +185,15 @@ public class CreatingPair extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, 
                             "Por favor digite um email.");
         } else {
+            BitcoinWot.BOT.sendMessage("nickserv", "REGISTER "
+                        + BitcoinWot.PASSWORD_STRING + " " + jTextField3.getText());
+
+            CreatingPair.this.dispatchEvent(new WindowEvent(CreatingPair.this, 
+                            WindowEvent.WINDOW_CLOSING));
 
             java.awt.EventQueue.invokeLater(new Runnable() {
               public void run() {
-                  new RegisteringWot().setVisible(true);
+                  new VerifyEmail().setVisible(true);
               }
             });
         }

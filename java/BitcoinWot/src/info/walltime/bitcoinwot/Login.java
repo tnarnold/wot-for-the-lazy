@@ -186,6 +186,11 @@ public class Login extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void onClose() {
+        if (BitcoinWot.PASSWORD_STRING != null) {
+            BOT.sendRawLine("/msg nickserv RELEASE "
+                    + getjTextField1().getText() + " " + BitcoinWot.PASSWORD_STRING);
+        }
+
         BOT.disconnect();
     }
 }
