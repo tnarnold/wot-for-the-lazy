@@ -26,23 +26,25 @@ public class IrcBot extends PircBot {
     protected void onNotice(String sourceNick, String sourceLogin, String sourceHostname, String target, String notice) {
         super.onNotice(sourceNick, sourceLogin, sourceHostname, target, notice);
 
-        System.out.println("Notice: " + sourceNick + ": " + notice);
+        if (BitcoinWot.LOGIN != null) {
+            System.out.println("Notice: " + sourceNick + ": " + notice);
 
-        if (notice.contains("is not registered")) {
-            JOptionPane.showMessageDialog(null, 
-                    "Esse nick não está registrado, por favor registre antes.");
-        } else if (notice.contains("Registered")) {
-            BitcoinWot.LOGIN.setState(Frame.ICONIFIED);
+            if (notice.contains("is not registered")) {
+                JOptionPane.showMessageDialog(null, 
+                        "Esse nick não está registrado, por favor registre antes.");
+            } else if (notice.contains("Registered")) {
+                BitcoinWot.LOGIN.setState(Frame.ICONIFIED);
 
-            java.awt.EventQueue.invokeLater(() -> {
-                new Password().setVisible(true);
-            });
-        } else if (notice.contains("has been regained")) {
-            BitcoinWot.PASSWORD.dispatchEvent(new WindowEvent(BitcoinWot.PASSWORD, 
-                    WindowEvent.WINDOW_CLOSING));
-        } else if (notice.contains("invalid password")) {
-                        JOptionPane.showMessageDialog(null, 
-                    "Senha incorreta!");
+                java.awt.EventQueue.invokeLater(() -> {
+                    new Password().setVisible(true);
+                });
+            } else if (notice.contains("has been regained")) {
+                BitcoinWot.PASSWORD.dispatchEvent(new WindowEvent(BitcoinWot.PASSWORD, 
+                        WindowEvent.WINDOW_CLOSING));
+            } else if (notice.contains("invalid password")) {
+                            JOptionPane.showMessageDialog(null, 
+                        "Senha incorreta!");
+            }
         }
     }
 
@@ -58,10 +60,12 @@ public class IrcBot extends PircBot {
     protected void onUserMode(String targetNick, String sourceNick, String sourceLogin, String sourceHostname, String mode) {
         super.onUserMode(targetNick, sourceNick, sourceLogin, sourceHostname, mode);
 
-        BitcoinWot.LOGIN.getjButton1().setEnabled(true);
-        BitcoinWot.LOGIN.getjButton2().setEnabled(true);
-        BitcoinWot.LOGIN.getjButton1().setCursor(Cursor.getDefaultCursor());
-        BitcoinWot.LOGIN.getjButton2().setCursor(Cursor.getDefaultCursor());
+        if (BitcoinWot.LOGIN != null) {
+            BitcoinWot.LOGIN.getjButton1().setEnabled(true);
+            BitcoinWot.LOGIN.getjButton2().setEnabled(true);
+            BitcoinWot.LOGIN.getjButton1().setCursor(Cursor.getDefaultCursor());
+            BitcoinWot.LOGIN.getjButton2().setCursor(Cursor.getDefaultCursor());
+        }
     }
     
     

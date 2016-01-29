@@ -20,6 +20,10 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
+        if (BitcoinWot.LOGIN != null) {
+            throw new RuntimeException("Not possible two instances at the same time.");
+        }
+
         BitcoinWot.LOGIN = this;
         initComponents();
 
