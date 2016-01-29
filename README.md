@@ -1,2 +1,3 @@
-# wot-for-the-lazy
-Bitcoin OTC WoT para preguiçosos
+# Bitcoin OTC WoT para preguiçosos
+
+Acesse [Bitcoin OTC WoT para preguiçosos](http://www.bitcoinwot.com/)
