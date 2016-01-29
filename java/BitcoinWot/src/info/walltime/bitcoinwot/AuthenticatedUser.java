@@ -246,9 +246,15 @@ public class AuthenticatedUser extends javax.swing.JFrame {
 
         int level = levels[jComboBox1.getSelectedIndex()];
 
-        BitcoinWot.BOT.sendMessage("gribble", ";;rate " 
-                        + jTextField2.getText() + " "
-                        + level + " " + jTextArea1.getText().replaceAll("\n", " - "));
+        if (jComboBox1.getSelectedIndex() == 0) {
+            BitcoinWot.BOT.sendMessage("gribble", ";;unrate " 
+                            + jTextField2.getText());            
+        } else {
+
+            BitcoinWot.BOT.sendMessage("gribble", ";;rate " 
+                            + jTextField2.getText() + " "
+                            + level + " " + jTextArea1.getText().replaceAll("\n", " - "));
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
