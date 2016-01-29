@@ -32,9 +32,15 @@ public class IrcBot extends PircBot {
             if (notice.contains("is not registered")) {
                 JOptionPane.showMessageDialog(null, 
                         "Esse nick não está registrado, por favor registre antes.");
+
+                BitcoinWot.LOGIN.getjButton1().setEnabled(true);
+                BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             } else if (notice.contains("Registered")) {
                 BitcoinWot.LOGIN.setState(Frame.ICONIFIED);
 
+                BitcoinWot.LOGIN.getjButton1().setEnabled(true);
+                BitcoinWot.LOGIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                
                 java.awt.EventQueue.invokeLater(() -> {
                     new Password().setVisible(true);
                 });
@@ -63,8 +69,8 @@ public class IrcBot extends PircBot {
         if (BitcoinWot.LOGIN != null) {
             BitcoinWot.LOGIN.getjButton1().setEnabled(true);
             BitcoinWot.LOGIN.getjButton2().setEnabled(true);
-            BitcoinWot.LOGIN.getjButton1().setCursor(Cursor.getDefaultCursor());
-            BitcoinWot.LOGIN.getjButton2().setCursor(Cursor.getDefaultCursor());
+            BitcoinWot.LOGIN.setCursor(Cursor.getDefaultCursor());
+            BitcoinWot.LOGIN.setCursor(Cursor.getDefaultCursor());
         }
     }
     

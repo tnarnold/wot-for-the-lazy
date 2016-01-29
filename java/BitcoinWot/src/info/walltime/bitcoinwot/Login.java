@@ -6,6 +6,7 @@
 package info.walltime.bitcoinwot;
 
 import static info.walltime.bitcoinwot.BitcoinWot.BOT;
+import java.awt.Cursor;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -65,7 +66,6 @@ public class Login extends javax.swing.JFrame {
         jLabel5.setText("* minúsculo sem espaços ou símbolos.");
 
         jButton1.setText("Entrar");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -74,7 +74,6 @@ public class Login extends javax.swing.JFrame {
         });
 
         jButton2.setText("Registrar...");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         jButton2.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -128,8 +127,9 @@ public class Login extends javax.swing.JFrame {
         if (jTextField1.getText().length() < 3) {
             JOptionPane.showMessageDialog(null, "Muito curto esse nick.");
         } else {
+            jButton1.setEnabled(false);
+            setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-            
             BitcoinWot.BOT.sendMessage("nickserv", "INFO " + jTextField1.getText());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
